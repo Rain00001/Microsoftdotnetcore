@@ -14,12 +14,23 @@ pool:
 variables:
   buildConfiguration: 'Release'
 
-steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+# do this before your build tasks
 
+steps:
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK'
   inputs:
     version: 3.0.x
     performMultiLevelLookup: true
+- task: DotNetCoreCLI@2
+  inputs:
+    command: restore
+    projects: 'pipelines-dotnet-core.csproj'
+    feedsToUse: config
+    nugetConfigPath: NuGet.config    # Relative to root of the repository
+  #  externalFeedCredentials: <Name of the NuGet service connection>
+
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildConfiguration)'
+
+# ...
