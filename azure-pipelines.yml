@@ -9,6 +9,13 @@ trigger:
 pool:
   vmImage: 'vs2017-win2016'
 
+steps:
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK'
+  inputs:
+    version: 3.0.x
+    performMultiLevelLookup: true
+
 variables:
   buildConfiguration: 'Release'
 
